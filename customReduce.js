@@ -1,4 +1,4 @@
-// Array.prototype.customReduceFunc = function(callback, initialValue) {
+// Array.prototype.customReduce = function(callback, initialValue) {
 //     let result = initialValue ?? this[0];
 
 //     for(let i=initialValue ? 0 : 1; i<this.length; i++) {
@@ -8,14 +8,14 @@
 //     return result;
 // }
 
-// const result = [1, 2, 3, 4, 5, 6].customReduceFunc((acc, currentValue) => {
+// const result = [1, 2, 3, 4, 5, 6].customReduce((acc, currentValue) => {
 //     console.log(acc, currentValue);
 //     return acc + currentValue;
 // });
 
 // console.log(result)
 
-// Array.prototype.customReduceFunc = function(...args) {
+// Array.prototype.customReduce = function(...args) {
 //     const hasInitialValue = args.length > 1;
     
 //     if(!hasInitialValue && this.length === 0) {
@@ -31,7 +31,7 @@
 //     return result;
 // }
 
-Array.prototype.customReduceFunc = function(cb, initialValue) {
+Array.prototype.customReduce = function(cb, initialValue) {
     const hasInitialValue = arguments.length > 1;
     
     if (!hasInitialValue && this.length === 0) {
@@ -47,7 +47,7 @@ Array.prototype.customReduceFunc = function(cb, initialValue) {
     return accumulator;
 };
 
-const result = [1, 2, 3, 4].customReduceFunc((acc, currentValue) => {
+const result = [1, 2, 3, 4].customReduce((acc, currentValue) => {
     return acc + currentValue;
 });
 
