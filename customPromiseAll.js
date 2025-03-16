@@ -1,4 +1,4 @@
-Promise.myAll = function (promises) {
+Promise.promiseAll = function (promises) {
   if (!Array.isArray(promises)) {
     return Promise.reject(new TypeError("Argument must be an array"));
   }
@@ -36,7 +36,7 @@ Promise.myAll = function (promises) {
 //   setTimeout(resolve, 100, "foo");
 // });
 
-// Promise.myAll([promise1, promise2, promise3]).then((values) => {
+// Promise.promiseAll([promise1, promise2, promise3]).then((values) => {
 //   console.log(values);
 // });
 
@@ -48,14 +48,14 @@ Promise.myAll = function (promises) {
 //   }, 100);
 // });
 
-// Promise.myAll([p1, p2, p3]).then((values) => {
+// Promise.promiseAll([p1, p2, p3]).then((values) => {
 //   console.log(values); // [3, 1337, "foo"]
 // });
 
 // console.log("----------------------------------------------------------------");
-// const p4 = Promise.myAll([1, 2, 3]);
-// const p5 = Promise.myAll([1, 2, 3, Promise.resolve(444)]);
-// const p6 = Promise.myAll([1, 2, 3, Promise.reject(555)]);
+// const p4 = Promise.promiseAll([1, 2, 3]);
+// const p5 = Promise.promiseAll([1, 2, 3, Promise.resolve(444)]);
+// const p6 = Promise.promiseAll([1, 2, 3, Promise.reject(555)]);
 // setTimeout(() => {
 //   console.log(p4);
 //   console.log(p5);
@@ -68,7 +68,7 @@ Promise.myAll = function (promises) {
 // Promise { <state>: "rejected", <reason>: 555 }
 
 // const resolvedPromisesArray = [Promise.resolve(33), Promise.resolve(44)];
-// const p = Promise.myAll(resolvedPromisesArray);
+// const p = Promise.promiseAll(resolvedPromisesArray);
 // console.log(p);
 // setTimeout(() => {
 //   console.log("the queue is now empty");
@@ -81,7 +81,7 @@ Promise.myAll = function (promises) {
 // Promise { <state>: "fulfilled", <value>: Array[2] }
 
 // const mixedPromisesArray = [Promise.resolve(33), Promise.reject(44)];
-// const p = Promise.myAll(mixedPromisesArray);
+// const p = Promise.promiseAll(mixedPromisesArray);
 // console.log(p);
 // setTimeout(() => {
 //   console.log("the queue is now empty");
@@ -93,8 +93,8 @@ Promise.myAll = function (promises) {
 // the queue is now empty
 // Promise { <state>: "rejected", <reason>: 44 }
 
-// const p = Promise.myAll([]);
-// const p2 = Promise.myAll([1337, "hi"]);
+// const p = Promise.promiseAll([]);
+// const p2 = Promise.promiseAll([1337, "hi"]);
 // console.log(p);
 // console.log(p2);
 // setTimeout(() => {

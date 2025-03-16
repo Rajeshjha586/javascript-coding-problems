@@ -1,4 +1,4 @@
-Promise.myAllSettled = function (promises) {
+Promise.promiseAllSettled = function (promises) {
   if (!Array.isArray(promises)) {
     return Promise.reject(new TypeError("Argument must be an array"));
   }
@@ -54,11 +54,11 @@ Promise.myAllSettled = function (promises) {
 // );
 // const promises = [promise1, promise2];
 
-// Promise.myAllSettled(promises).then((results) =>
+// Promise.promiseAllSettled(promises).then((results) =>
 //   results.forEach((result) => console.log(result.status))
 // );
 
-// Promise.myAllSettled([
+// Promise.promiseAllSettled([
 //   Promise.resolve(33),
 //   new Promise((resolve) => setTimeout(() => resolve(66), 0)),
 //   99,

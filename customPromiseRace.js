@@ -41,7 +41,7 @@ Promise.promiseRace = function (promises) {
 // const p1 = sleep(500, "one", "fulfill");
 // const p2 = sleep(100, "two", "fulfill");
 
-// Promise.race([p1, p2]).then((value) => {
+// Promise.promiseRace([p1, p2]).then((value) => {
 //   console.log(value); // "two"
 //   // Both fulfill, but p2 is faster
 // });
@@ -49,7 +49,7 @@ Promise.promiseRace = function (promises) {
 // const p3 = sleep(100, "three", "fulfill");
 // const p4 = sleep(500, "four", "reject");
 
-// Promise.race([p3, p4]).then(
+// Promise.promiseRace([p3, p4]).then(
 //   (value) => {
 //     console.log(value); // "three"
 //     // p3 is faster, so it fulfills
@@ -62,7 +62,7 @@ Promise.promiseRace = function (promises) {
 // const p5 = sleep(500, "five", "fulfill");
 // const p6 = sleep(100, "six", "reject");
 
-// Promise.race([p5, p6]).then(
+// Promise.promiseRace([p5, p6]).then(
 //   (value) => {
 //     // Not called
 //   },

@@ -1,4 +1,4 @@
-Promise.myAny = function (promises) {
+Promise.promiseAny = function (promises) {
   if (!Array.isArray(promises)) {
     return Promise.reject(new TypeError("Argument must be an array"));
   }
@@ -35,7 +35,7 @@ Promise.myAny = function (promises) {
 
 // const promises = [promise1, promise2, promise3];
 
-// Promise.myAny(promises)
+// Promise.promiseAny(promises)
 //   .then((value) => console.log(value))
 //   .catch((err) => console.log(err));
 
@@ -43,6 +43,6 @@ Promise.myAny = function (promises) {
 //   reject("Always fails");
 // });
 
-// Promise.myAny([failure]).catch((err) => {
+// Promise.promiseAny([failure]).catch((err) => {
 //   console.log(err);
 // });
