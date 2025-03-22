@@ -37,6 +37,10 @@ class MyPromise {
   }
 
   #resolve(value) {
+    if (!value) {
+      return;
+    }
+
     if (this.#isResolveOrRejectCalled) return;
 
     this.#isResolveOrRejectCalled = true;
@@ -56,6 +60,10 @@ class MyPromise {
   }
 
   #reject(error) {
+    if (!error) {
+      return;
+    }
+
     if (this.#isResolveOrRejectCalled) return;
     this.#isResolveOrRejectCalled = true;
 
@@ -133,19 +141,105 @@ class MyPromise {
   }
 }
 
-const mp1 = new MyPromise((resolve, reject) => {
-  setTimeout(() => resolve(1), 100);
-});
-const mp2 = MyPromise.resolve(2);
-const mp = new MyPromise((resolve, reject) => {
-  resolve(mp1);
-  resolve(mp2);
-  reject(3);
-}).then(
-  (data) => {
-    console.log("resolve", data);
-  },
-  (reason) => {
-    console.log("reject", reason);
-  }
-);
+// const mp1 = new MyPromise((resolve, reject) => {
+//   setTimeout(() => resolve(1), 100);
+// });
+// const mp2 = MyPromise.resolve(2);
+// const mp = new MyPromise((resolve, reject) => {
+//   resolve(mp1);
+//   resolve(mp2);
+//   reject(3);
+// }).then(
+//   (data) => {
+//     console.log("resolve", data);
+//   },
+//   (reason) => {
+//     console.log("reject", reason);
+//   }
+// );
+
+// 1.) Basic Promise Resolve
+// const p1 = new MyPromise((resolve) => {
+//   resolve("Hello, World!");
+// });
+
+// p1.then(console.log);
+
+// 2.) Basic Promise Reject
+// const p2 = new MyPromise((_, reject) => {
+//   reject("Something went wrong!");
+// });
+
+// p2.catch(console.log);
+
+// 3.) resolve Called Multiple Times
+// const p3 = new MyPromise((resolve) => {
+//   resolve("First Call");
+//   resolve("Second Call"); // Should be ignored
+// });
+
+// p3.then(console.log);
+
+// 4.) reject Called Multiple Times
+// const p4 = new MyPromise((_, reject) => {
+//   reject("First Error");
+//   reject("Second Error"); // Should be ignored
+// });
+
+// p4.catch(console.log);
+
+// 5.) Calling resolve() After reject()
+// const p5 = new MyPromise((resolve, reject) => {
+//   reject("Initial Rejection");
+//   resolve("Should be ignored");
+// });
+
+// p5.catch(console.log);
+
+// 6.) Calling reject() After resolve()
+// const p6 = new MyPromise((resolve, reject) => {
+//   resolve("Initial Resolution");
+//   reject("Should be ignored");
+// });
+
+// p6.then(console.log).catch(console.error);
+
+// 7.) Error Thrown Inside Executor
+// const p7 = new MyPromise(() => {
+//   throw new Error("Crash!");
+// });
+
+// p7.catch(console.log);
+
+// 8.) .then() Registered After Resolution
+// const p8 = new MyPromise((resolve) => {
+//   resolve("Instant Value");
+// });
+
+// setTimeout(() => {
+//   p8.then(console.log); // Should execute immediately
+// }, 2000);
+
+// 9.) .then() Registered Before Resolution
+// const p9 = new MyPromise((resolve) => {
+//   setTimeout(() => resolve("Delayed Value"), 1000);
+// });
+
+// p9.then(console.log);
+
+// 10.) Chaining Multiple .then() Calls
+// const p10 = new MyPromise((resolve) => {
+//   resolve(10);
+// });
+
+// p10
+//   .then((value) => value * 2)
+//   .then((value) => value + 5)
+//   .then(console.log);
+
+// 11.) Handling Chained Promise Resolution
+// const p11 = new MyPromise((resolve) => {
+//   resolve(new MyPromise((res) => res("Nested Promise!")));
+// });
+
+// p11.then(console.log);
