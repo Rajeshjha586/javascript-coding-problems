@@ -7,11 +7,9 @@ class EventEmitter {
     this.events = this.events || {};
     this.events[eventName] = this.events[eventName] || [];
     this.events[eventName].push(callback);
-    console.log("test", this.events);
 
     return {
       release: () => {
-        console.log("--------");
         const indexOf = this.events[eventName].indexOf(callback);
         if (indexOf !== -1) {
           this.events[eventName].splice(indexOf, 1);
@@ -21,7 +19,6 @@ class EventEmitter {
   }
 
   emit(eventName, ...args) {
-    console.log("test 1", this.events);
     this.events = this.events || {};
     this.events[eventName] = this.events[eventName] || [];
     this.events[eventName].forEach((fn) => {
@@ -52,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   button.addEventListener("click", () => {
     const name = input.value.trim();
-    console.log("hjwwkwkwkw", name);
     if (name) {
       emitter.emit("submitName", { name });
 
