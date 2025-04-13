@@ -161,7 +161,17 @@ function stringify(value, replacer, space) {
     throw new TypeError("Converting circular structure to JSON");
   }
 
-  const replacerFn = typeof replacer === "function" ? replacer : null;
+  let replacerFn = null;
+  if (typeof replacer === "function") {
+    replacerFn = replacer;
+  } else if (Array.isArray(replacer)) {
+    const keySet = new Set(replacer.map(String));
+    replacerFn = (key, val) =>
+      keySet.has(key) || key === "" ? val : undefined;
+  } else {
+    replacerFn = null;
+  }
+
   const indent =
     typeof space === "number"
       ? " ".repeat(Math.min(10, space))
@@ -214,41 +224,41 @@ function stringify(value, replacer, space) {
 
 // console.log(stringify(arrs));
 
-function replacer(key, value) {
-  // Filtering out properties
-  if (typeof value === "string") {
-    return undefined;
-  }
-  return value;
-}
+// function replacer(key, value) {
+//   // Filtering out properties
+//   if (typeof value === "string") {
+//     return undefined;
+//   }
+//   return value;
+// }
 
-const foo = {
-  foundation: "Mozilla",
-  model: "box",
-  week: 45,
-  transport: "car",
-  month: 7,
-};
-console.log(stringify(foo, replacer));
+// const foo = {
+//   foundation: "Mozilla",
+//   model: "box",
+//   week: 45,
+//   transport: "car",
+//   month: 7,
+// };
+// console.log(stringify(foo, replacer));
 
-function makeReplacer() {
-  let isInitial = true;
+// function makeReplacer() {
+//   let isInitial = true;
 
-  return (key, value) => {
-    if (isInitial) {
-      isInitial = false;
-      return value;
-    }
-    if (key === "") {
-      // Omit all properties with name "" (except the initial object)
-      return undefined;
-    }
-    return value;
-  };
-}
+//   return (key, value) => {
+//     if (isInitial) {
+//       isInitial = false;
+//       return value;
+//     }
+//     if (key === "") {
+//       // Omit all properties with name "" (except the initial object)
+//       return undefined;
+//     }
+//     return value;
+//   };
+// }
 
-const replacer1 = makeReplacer();
-console.log(stringify({ "": 1, b: 2 }, replacer1));
+// const replacer1 = makeReplacer();
+// console.log(stringify({ "": 1, b: 2 }, replacer1));
 
 const foos = {
   foundation: "Mozilla",
@@ -258,6 +268,6 @@ const foos = {
   month: 7,
 };
 
-console.log(JSON.stringify(foos, ["week", "month"]));
+console.log(stringify(foos, ["week", "month", 1, "model"]));
 
-console.log(JSON.stringify({ uno: 1, dos: 2 }, null, "-------"));
+console.log(stringify({ uno: 1, dos: 2 }, null, "-------"));
