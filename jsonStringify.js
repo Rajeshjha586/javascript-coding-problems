@@ -168,8 +168,10 @@ function stringify(value, replacer, space) {
     const keySet = new Set(replacer.map(String));
     replacerFn = (key, val) =>
       keySet.has(key) || key === "" ? val : undefined;
-  } else {
-    replacerFn = null;
+  }
+
+  if (replacerFn) {
+    value = replacerFn("", value);
   }
 
   const indent =
@@ -239,35 +241,50 @@ function stringify(value, replacer, space) {
 //   transport: "car",
 //   month: 7,
 // };
-// console.log(stringify(foo, replacer));
+// console.log("-----JSON Stringify--->", JSON.stringify(foo, replacer));
+// console.log("---custom Stringify--->", stringify(foo, replacer));
 
-// function makeReplacer() {
-//   let isInitial = true;
+function makeReplacer() {
+  let isInitial = true;
 
-//   return (key, value) => {
-//     if (isInitial) {
-//       isInitial = false;
-//       return value;
-//     }
-//     if (key === "") {
-//       // Omit all properties with name "" (except the initial object)
-//       return undefined;
-//     }
-//     return value;
-//   };
-// }
+  return (key, value) => {
+    if (isInitial) {
+      isInitial = false;
+      return value;
+    }
+    if (key === "") {
+      // Omit all properties with name "" (except the initial object)
+      return undefined;
+    }
+    return value;
+  };
+}
 
-// const replacer1 = makeReplacer();
-// console.log(stringify({ "": 1, b: 2 }, replacer1));
+const replacer1 = makeReplacer();
+// console.log(
+//   "-----JSON Stringify--->",
+//   JSON.stringify({ "": 1, b: 2 }, replacer1)
+// );
+console.log(
+  "---custom Stringify--->",
+  stringify({ "": 1, b: 2, "": 3, "": 5, c: 22 }, replacer1)
+);
 
-const foos = {
-  foundation: "Mozilla",
-  model: "box",
-  week: 45,
-  transport: "car",
-  month: 7,
-};
+// const foos = {
+//   foundation: "Mozilla",
+//   model: "box",
+//   week: 45,
+//   transport: "car",
+//   month: 7,
+// };
 
-console.log(stringify(foos, ["week", "month", 1, "model"]));
+// console.log(
+//   "-----JSON Stringify--->",
+//   JSON.stringify(foos, ["week", "month", 1, "model"])
+// );
+// console.log(
+//   "---custom Stringify--->",
+//   stringify(foos, ["week", "month", 1, "model"])
+);
 
-console.log(stringify({ uno: 1, dos: 2 }, null, "-------"));
+// console.log(stringify({ uno: 1, dos: 2 }, null, "-------"));
