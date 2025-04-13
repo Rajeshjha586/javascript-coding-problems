@@ -55,7 +55,7 @@ function detectValueType(value) {
   return "object";
 }
 
-function stringifyArr(value) {
+function stringifyArr(value, replacerFn, space, depth) {
   let stringifiedArrayData = [];
 
   for (const [index, val] of value.entries()) {
@@ -63,34 +63,40 @@ function stringifyArr(value) {
       continue;
     }
 
-    const typeOfValue = detectValueType(val);
-
+    let updatedVal = replacerFn ? replacerFn(String(i), value[i]) : value[i];
+    const typeOfValue = detectValueType(updatedVal);
+    let serialized;
     switch (typeOfValue) {
       case "array":
-        stringifiedArrayData.push(stringifyArr(val));
+        serialized = stringifyArr(val, replacerFn, space, depth + 1);
         break;
       case "object":
       case "map":
-        stringifiedArrayData.push(stringifyObj(val));
+        serialized = stringifyObj(val, replacerFn, space, depth + 1);
         break;
       case "symbol":
       case "function":
       case "undefined":
-        stringifiedArrayData.push("null");
+        serialized = "null";
         break;
       default:
-        stringifiedArrayData.push(_stringify(typeOfValue, val));
+        serialized = _stringify(typeOfValue, val);
     }
+    stringifiedArrayData.push(serialized);
   }
 
-  return `[${stringifiedArrayData.join(",")}]`;
+  const indent = space ? "\n" + space.repeat(depth) : "";
+  const closingIndent = space ? "\n" + space.repeat(depth - 1) : "";
+  return `[${indent}${stringifiedArrayData.join(
+    space ? ",\n" + space.repeat(depth) : ","
+  )}${closingIndent}]`;
 }
 
-function stringifyObj(value) {
+function stringifyObj(value, replacerFn, space, depth) {
   let stringifiedValue = [];
 
   for (const key of Object.keys(value)) {
-    const val = value[key];
+    let val = replacerFn ? replacerFn(key, value[key]) : value[key];
     const typeOfValue = detectValueType(val);
 
     if (
@@ -118,7 +124,11 @@ function stringifyObj(value) {
     stringifiedValue.push(stringifiedKey);
   }
 
-  return `{${stringifiedValue.join(",")}}`;
+  const indent = space ? "\n" + space.repeat(depth) : "";
+  const closingIndent = space ? "\n" + space.repeat(depth - 1) : "";
+  return `{${indent}${stringifiedValue.join(
+    space ? ",\n" + space.repeat(depth) : ","
+  )}${closingIndent}}`;
 }
 
 function _stringify(typeOfData, value) {
@@ -146,30 +156,43 @@ function _stringify(typeOfData, value) {
   }
 }
 
-function stringify(value) {
+function stringify(value, replacer, space) {
   if (isCyclic(value)) {
     throw new TypeError("Converting circular structure to JSON");
   }
 
+  const replacerFn = typeof replacer === "function" ? replacer : null;
+  const indent =
+    typeof space === "number"
+      ? " ".repeat(Math.min(10, space))
+      : typeof space === "string"
+      ? space.slice(0, 10)
+      : "";
+
   const typeOfValue = detectValueType(value);
 
   if (typeOfValue === "array") {
-    return stringifyArr(value);
+    return stringifyArr(value, replacerFn, indent, 1);
   }
 
   if (typeOfValue === "object" || typeOfValue === "map") {
-    return stringifyObj(value);
+    return stringifyObj(value, replacerFn, indent, 1);
   }
 
-  const result = _stringify(typeOfValue, value);
+  const result = _stringify(
+    typeOfValue,
+    replacerFn ? replacerFn("", value) : value
+  );
+
   return result === undefined ? undefined : result;
 }
 
 // const sym = Symbol();
 // console.log(stringify(sym));
 
-const arr = [Symbol("key")];
-console.log(JSON.stringify(arr));
+// const arr = [Symbol("key")];
+// console.log(JSON.stringify(arr));
+
 // const List = function (val) {
 //   this.next = null;
 //   this.val = val;
@@ -184,3 +207,57 @@ console.log(JSON.stringify(arr));
 // item3.next = item1;
 
 // console.log(stringify(item1));
+
+// const arrs = [];
+// arrs[2] = "hello";
+// arrs[10] = "Bye";
+
+// console.log(stringify(arrs));
+
+function replacer(key, value) {
+  // Filtering out properties
+  if (typeof value === "string") {
+    return undefined;
+  }
+  return value;
+}
+
+const foo = {
+  foundation: "Mozilla",
+  model: "box",
+  week: 45,
+  transport: "car",
+  month: 7,
+};
+console.log(stringify(foo, replacer));
+
+function makeReplacer() {
+  let isInitial = true;
+
+  return (key, value) => {
+    if (isInitial) {
+      isInitial = false;
+      return value;
+    }
+    if (key === "") {
+      // Omit all properties with name "" (except the initial object)
+      return undefined;
+    }
+    return value;
+  };
+}
+
+const replacer1 = makeReplacer();
+console.log(stringify({ "": 1, b: 2 }, replacer1));
+
+const foos = {
+  foundation: "Mozilla",
+  model: "box",
+  week: 45,
+  transport: "car",
+  month: 7,
+};
+
+console.log(JSON.stringify(foos, ["week", "month"]));
+
+console.log(JSON.stringify({ uno: 1, dos: 2 }, null, "-------"));
