@@ -8,6 +8,15 @@
 //   }
 // };
 
+/**
+ * Creates a custom iterator for an array, returning key-value pairs like [index, element],
+ * similar to Array.prototype.entries().
+ *
+ * @this {Array} The array on which the method is called.
+ * @returns {Iterator<[number, any]>} An iterator object that returns [index, value] pairs
+ *          with each call to `.next()`, and has a [Symbol.iterator]() method to support for...of loops.
+ */
+
 Array.prototype.customEntries = function () {
   var index = 0;
   var array = this;
