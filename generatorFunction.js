@@ -24,3 +24,24 @@
     };
   }
 })();
+
+// every function has a .constructor property that points to the function that was used to create it.
+// const fn = function () {};
+// console.log(fn.constructor); // ƒ Function()
+
+// fn was created using the built-in Function constructor.
+// let GeneratorFunction = function* () {}.constructor;
+// 1. function* () {} → defines a generator function (anonymous)
+// 2. .constructor → asks “what constructor created this function?”
+// 3. The answer: a hidden internal constructor called GeneratorFunction
+
+// GeneratorFunction === (function* () {}).constructor
+// It is the special constructor function that JavaScript uses behind the scenes to create generator functions,
+// just like Function is used for regular functions.
+
+// Function Type              Constructor
+// Regular Function           Function
+// Generator Function         GeneratorFunction
+
+// .constructor gives you the constructor function that was used to create an object.
+// For a generator function, .constructor returns GeneratorFunction
