@@ -25,11 +25,10 @@ Array.prototype.customShift = function () {
 
   for (let index = 0; index < length - 1; index++) {
     if (index + 1 in obj) {
-      this[index] = this[index + 1];
+      obj[index] = obj[index + 1];
     } else {
       delete obj[index];
     }
-    console.log(this);
   }
 
   delete obj[length - 1];
