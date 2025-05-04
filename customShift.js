@@ -29,6 +29,7 @@ Array.prototype.customShift = function () {
     } else {
       delete obj[index];
     }
+    console.log(this);
   }
 
   delete obj[length - 1];
@@ -74,3 +75,11 @@ Array.prototype.customShift = function () {
 // Array.prototype.customShift.call(plainObj);
 // console.log(plainObj);
 // // { length: 0 }
+
+const arr = [];
+arr[0] = "a";
+arr[3] = "d";
+
+console.log("Before shif: ", arr); //[ 'a', <2 empty items>, 'd' ]
+const data = arr.customShift();
+console.log("After custom shift: ", data, arr);
