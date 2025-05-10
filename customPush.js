@@ -1,3 +1,9 @@
+/**
+ * Adds one or more elements to the end of an array-like object.
+ *
+ * @param {...any} elements - The elements to add to the end of the array-like object.
+ * @returns {number} The new length of the array-like object after the elements have been added.
+ */
 Array.prototype.customPush = function () {
   if (!this) {
     throw TypeError('"this" is null or undefined');
